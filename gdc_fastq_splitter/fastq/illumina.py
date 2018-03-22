@@ -72,8 +72,10 @@ class IlluminaSequenceIdentifierNoBarcode(base.SequenceIdentifier):
         return True
 
 class IlluminaFastqRecord(base.FastqRecord):
-    def __init__(self, seqid, sequence, qid, qual, seqid_cls=IlluminaSequenceIdentifier):
-        super().__init__(seqid, sequence, qid, qual, seqid_cls=seqid_cls)
+    seqid_cls = IlluminaSequenceIdentifier
+
+    def __init__(self, seqid, sequence, qid, qual):
+        super().__init__(seqid, sequence, qid, qual)
 
     @property
     def read_key(self):
@@ -95,9 +97,15 @@ class IlluminaFastqRecord(base.FastqRecord):
     def lane(self):
         return self.seqid.lane
 
+    @classmethod
+    def is_valid_seqid(cls, seqid):
+        return cls.seqid_cls.is_valid(seqid)
+
 class IlluminaNoBarcodeFastqRecord(base.FastqRecord):
-    def __init__(self, seqid, sequence, qid, qual, seqid_cls=IlluminaSequenceIdentifierNoBarcode):
-        super().__init__(seqid, sequence, qid, qual, seqid_cls=seqid_cls)
+    seqid_cls = IlluminaSequenceIdentifierNoBarcode
+
+    def __init__(self, seqid, sequence, qid, qual):
+        super().__init__(seqid, sequence, qid, qual)
 
     @property
     def read_key(self):
@@ -115,15 +123,19 @@ class IlluminaNoBarcodeFastqRecord(base.FastqRecord):
     def lane(self):
         return self.seqid.lane
 
+    @classmethod
+    def is_valid_seqid(cls, seqid):
+        return cls.seqid_cls.is_valid(seqid)
+
 def infer_fastq_type(fil):
     """
     Infer the type of fastq based on the first line.
     """
     def predicate(obj):
         """A predicate to get all classes that are subclasses of
-        base.SequenceIdentifier"""
-        return inspect.isclass(obj) and issubclass(obj, base.SequenceIdentifier) \
-            and hasattr(obj, 'is_valid')
+        base.FastqRecord"""
+        return inspect.isclass(obj) and issubclass(obj, base.FastqRecord) \
+            and hasattr(obj, 'is_valid_seqid')
 
     fh = gzip.open(fil, 'rt') if fil.endswith('.gz') else \
         open(fil, 'rt')
@@ -132,10 +144,11 @@ def infer_fastq_type(fil):
 
     try:
         line = fh.readline().rstrip('\r\n')
+        #mod = sys.modules["gdc_fastq_splitter.fastq.illumina"]
         mod = sys.modules["gdc_fastq_splitter.fastq.illumina"]
         # Get all available seqidentifier types 
         for m in inspect.getmembers(mod, predicate):
-            if m[1].is_valid(line):
+            if m[1].is_valid_seqid(line):
                 cls_mod = m
                 break 
     finally:

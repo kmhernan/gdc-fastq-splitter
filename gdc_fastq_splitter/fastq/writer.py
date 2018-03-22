@@ -1,7 +1,7 @@
 """Module containing writer classes for writing Fastq files"""
 import gzip
 import io
-from gdc_fastq_splitter.fastq.report import BaseReport
+from gdc_fastq_splitter.fastq.report import BaseReport, ReportWithBarcodes
 
 class FastqWriter:
     """Base Fastq writer class"""
@@ -28,11 +28,12 @@ class FastqWriterWithReport(FastqWriter):
         self.reporter = reporter
 
     @classmethod
-    def from_record_and_prefix(cls, prefix, record, report_cls=BaseReport):
-        fbase = '{0}_{1}_R{2}'.format(prefix, record.read_key, record.read_pair)
+    def from_record_and_prefix(cls, record, prefix):
+        report_cls = ReportWithBarcodes if hasattr(record, 'index') else BaseReport
+        fbase = '{0}{1}_R{2}'.format(prefix, record.read_key, record.read_pair)
         fname = '{0}.fq.gz'.format(fbase)
         rname = '{0}.report.json'.format(fbase)
-        return cls(fname, report_cls(rname, flowcell_barcode=record.flowcell, lane_number=record.lane))
+        return cls(fname, report_cls(rname, fname, flowcell_barcode=record.flowcell, lane_number=record.lane))
 
     def __iadd__(self, record):
         self.reporter += record
@@ -42,4 +43,3 @@ class FastqWriterWithReport(FastqWriter):
     def close(self):
         super().close()
         self.reporter.write_to_json()
-

@@ -20,8 +20,9 @@ class SequenceIdentifier(metaclass=ABCMeta):
 
 class FastqRecord:
     """The base class for a Fastq record"""
-    def __init__(self, seqid, sequence, qid, qual, seqid_cls=SequenceIdentifier):
-        self.seqid = seqid_cls.from_string(seqid)
+    seqid_cls=SequenceIdentifier
+    def __init__(self, seqid, sequence, qid, qual):
+        self.seqid = self.seqid_cls.from_string(seqid)
         self.sequence = sequence
         self.qid = qid
         self.qual = qual

@@ -6,9 +6,10 @@ from collections import Counter
 
 class BaseReport:
     """Base report for a fastq file"""
-    def __init__(self, filename, flowcell_barcode=None, lane_number=None):
-        self._filename = filename
-        self.filename = os.path.basename(filename)
+    def __init__(self, report_filename, fastq_filename, flowcell_barcode=None, lane_number=None):
+        self._report_filename = report_filename
+        self.report_filename = os.path.basename(report_filename)
+        self.fastq_filename = os.path.basename(fastq_filename)
         self.flowcell_barcode = flowcell_barcode
         self.lane_number = lane_number
         self.record_counts = 0
@@ -18,12 +19,12 @@ class BaseReport:
         return self
 
     def __str__(self):
-        return '<flowcell>({0.flowcell_barcode}),<lane>({0.lane_number})'.format(self)
+        return json.dumps(self.to_dict(), indent=2, sort_keys=True)
 
     def to_dict(self):
         return {
             'metadata': {
-                'filename': self.filename,
+                'fastq_filename': self.fastq_filename,
                 'flowcell_barcode': self.flowcell_barcode,
                 'lane_number': self.lane_number,
                 'record_count': self.record_counts
@@ -31,14 +32,14 @@ class BaseReport:
         }
 
     def write_to_json(self):
-        with open(self._filename, 'wt') as o:
+        with open(self._report_filename, 'wt') as o:
             json.dump(self.to_dict(), o, indent=2, sort_keys=True)
 
 
-class BarcodeFastqReport(BaseReport):
+class ReportWithBarcodes(BaseReport):
     """Report that contains barcode frequencies."""
-    def __init__(self, filename, flowcell_barcode=None, lane_number=None):
-        super().__init__(filename, flowcell_barcode=flowcell_barcode, lane_number=lane_number)
+    def __init__(self, report_filename, fastq_filename, flowcell_barcode=None, lane_number=None):
+        super().__init__(report_filename, fastq_filename, flowcell_barcode=flowcell_barcode, lane_number=lane_number)
         self.barcode_frequency = Counter()
 
     @property
@@ -57,13 +58,10 @@ class BarcodeFastqReport(BaseReport):
         self._add_barcode(record.index)
         return self
 
-    def __str__(self):
-        return '<flowcell>({0.flowcell_barcode}),<barcode>({0.multiplex_barcode}),<lane>({0.lane_number})'.format(self)
-
     def to_dict(self):
         return {
             'metadata': {
-                'filename': self.filename,
+                'filename': self.fastq_filename,
                 'flowcell_barcode': self.flowcell_barcode,
                 'multiplex_barcode': self.most_common_barcode,
                 'lane_number': self.lane_number,

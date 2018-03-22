@@ -2,7 +2,10 @@ import unittest
 import os
 import logging
 
-from gdc_fastq_splitter.fastq.illumina import IlluminaSequenceIdentifierNoBarcode, IlluminaSequenceIdentifier, IlluminaFastqRecord, infer_fastq_type
+from gdc_fastq_splitter.fastq.illumina import (
+    IlluminaFastqRecord, IlluminaSequenceIdentifierNoBarcode, 
+    IlluminaSequenceIdentifier, IlluminaNoBarcodeFastqRecord,
+    infer_fastq_type) 
 
 class TestIlluminaSequenceIdentifier(unittest.TestCase):
     """Test modern illumina sequence identifiers"""
@@ -58,18 +61,21 @@ class TestIlluminaFastqRecord(unittest.TestCase):
 class TestInferFastqType(unittest.TestCase):
     """Test the infer_fastq_type functionality"""
     def test_modern(self):
+        """Testing IlluminaFastqRecord"""
         fil = os.path.join(os.path.dirname(__file__), 'etc/fake_IlluminaSequenceIdentifier.fastq')
         m = infer_fastq_type(fil)
-        expected = ('IlluminaSequenceIdentifier', IlluminaSequenceIdentifier)
+        expected = ('IlluminaFastqRecord', IlluminaFastqRecord)
         self.assertEqual(expected, m)
 
     def test_nobarcode(self):
+        """Testing IlluminaNoBarcodeFastqRecord"""
         fil = os.path.join(os.path.dirname(__file__), 'etc/fake_IlluminaSequenceIdentifierNoBarcode.fastq')
         m = infer_fastq_type(fil)
-        expected = ('IlluminaSequenceIdentifierNoBarcode', IlluminaSequenceIdentifierNoBarcode)
+        expected = ('IlluminaNoBarcodeFastqRecord', IlluminaNoBarcodeFastqRecord)
         self.assertEqual(expected, m)
 
     def test_unknown(self):
+        """Testing raise exception"""
         fil = os.path.join(os.path.dirname(__file__), 'etc/fake_Unknown.fastq')
 
         with self.assertRaises(Exception):

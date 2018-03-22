@@ -15,6 +15,7 @@ setup(
     license = "Apache 2.0",
     packages = [
         "gdc_fastq_splitter",
+        "gdc_fastq_splitter.fastq",
     ],
     classifiers = [
         "Development Status :: 3 - Alpha",
