@@ -61,7 +61,7 @@ class ReportWithBarcodes(BaseReport):
     def to_dict(self):
         return {
             'metadata': {
-                'filename': self.fastq_filename,
+                'fastq_filename': self.fastq_filename,
                 'flowcell_barcode': self.flowcell_barcode,
                 'multiplex_barcode': self.most_common_barcode,
                 'lane_number': self.lane_number,
