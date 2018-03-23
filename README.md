@@ -40,5 +40,52 @@ optional arguments:
 ```
 
 The output prefix will be used for the output files created which will be of the form 
-`<prefix><flowcell>_<lane>_R<1/2>.fq.gz`
+`<prefix><flowcell>_<lane>_R<1/2>.fq.gz` so you probably will want to include either a
+`.` or a `_` in your `--output-prefix` option.
 
+__For example, this single-end fastq command:__
+
+```
+gdc-fastq-splitter --output-prefix output_fastq_ input_fastq.fq.gz
+```
+
+will create output files for each detected readgroup with this structure in the current working directory:
+
+```
+output_fastq_<flowcell>_<lane>_R1.fq.gz
+```
+
+__While, this single-end fastq command:__
+
+```
+gdc-fastq-splitter --output-prefix output_fastq input_fastq.fq.gz
+```
+
+will create output files for each detected readgroup with this structure in the current working directory:
+
+```
+output_fastq<flowcell>_<lane>_R1.fq.gz
+```
+
+Thus, you should include whatever character (usually `.` or `_`) that you prefer to separate your prefix from the 
+information added by the CLI.
+
+**Note: R1 and R2 are inferred from the sequence ID rows and automatically added to the output files**
+
+## Report JSON
+
+A report JSON file will be created for each mate and readgroup detected by the software. For fastq files with sequence
+identifiers that do not have the multiplex barcode index in them, the report JSON created will have the following
+format:
+
+```
+{
+  "metadata": {
+    "fastq_filename": <output fastq filename referenced by this report>,
+    "flowcell_barcode": <flowcell barcode for this readgroup>,
+    "lane_number": <lane number for this readgroup>,
+    "record_count": <number of records output into this readgroup fastq file>
+  }
+}
+```
+for e
