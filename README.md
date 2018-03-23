@@ -9,11 +9,20 @@ fastq files with the following seqid formats:
 
 ## Install
 
-You must use python 3.5 or greater
+The only dependencies are python>=3.5 as only standard python libraries are used. However, your build of python3 
+does need to have been compiled with the zlib binding, which are including in standard python installations.
 
-`pip install .`
+1. Clone: `git clone git@github.com:kmhernan/gdc-fastq-splitter.git`
+2. Change directories: `cd gdc-fastq-splitter`
+3. Checkout develop branch: `git checkout develop`
+4. Create virtualenv (the path to your python3 executable may be different; your path to your virtual environment may be different): `virtualenv venv --python /usr/bin/python3.5`
+5. Install (the path to your virtual environment may be differen): `./venv/bin/pip install .`
+
+If you want to run unittest tests before your install: `./venv/bin/python -m unittest -v`
 
 ## Usage
+
+The CLI will be installed as `venv/bin/gdc-fastq-splitter`. The output of the help (`-h`) comand:
 
 ```
 gdc-fastq-splitter -h
