@@ -88,4 +88,12 @@ format:
   }
 }
 ```
-for e
+
+If there are multiplex barcodes, an additional section will contain the frequency of all barcodes seen for the
+readgroup and an additional key in the `metadata` object will have the most frequent `multiplex_barcode`.
+
+## Limitations
+
+* This will only work as expected for fastqs that have sequence identifiers described above
+* We do *not* support interleaved fastq files, and no checks are done to ensure this
+* We do *not* support fastq files with a mixture of sequence identifiers
