@@ -41,9 +41,16 @@ optional arguments:
                         The output prefix to use for output files.
 ```
 
+### Inputs
+
+The input fastq can either be ASCII text or gzip (must end with `.gz`) compressed, no other compression formats are
+accepted.
+
+### Outputs
+
 The output prefix will be used for the output files created which will be of the form 
 `<prefix><flowcell>_<lane>_R<1/2>.fq.gz` so you probably will want to include either a
-`.` or a `_` in your `--output-prefix` option.
+`.` or a `_` in your `--output-prefix` option. (The outputs will always be gzip compressed).
 
 __For example, this single-end fastq command:__
 
@@ -73,9 +80,6 @@ Thus, you should include whatever character (usually `.` or `_`) that you prefer
 information added by the CLI.
 
 **Note: R1 and R2 are inferred from the sequence ID rows and automatically added to the output files**
-
-The input fastq can either be ASCII text or gzip (must end with `.gz`) compressed, no other compression formats are
-accepted. The outputs will always be `.gz` and gzip compressed.
 
 ## Report JSON
 
