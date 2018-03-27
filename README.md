@@ -7,6 +7,8 @@ fastq files with the following seqid formats:
 
 `@<machine>:<run>:<flowcell>:<lane>:<tile>:<x_coord>:<y_coord>/<read_mate_number>`
 
+**Note: Your fastq must contain one of these formats but not a mixture of both**
+
 ## Install
 
 The only dependencies are python>=3.5 as only standard python libraries are used. However, your build of python3 
