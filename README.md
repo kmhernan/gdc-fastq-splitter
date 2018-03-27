@@ -16,7 +16,7 @@ does need to have been compiled with the zlib binding, which are including in st
 2. Change directories: `cd gdc-fastq-splitter`
 3. Checkout develop branch: `git checkout develop`
 4. Create virtualenv (the path to your python3 executable may be different; your path to your virtual environment may be different): `virtualenv venv --python /usr/bin/python3.5`
-5. Install (the path to your virtual environment may be differen): `./venv/bin/pip install .`
+5. Install (the path to your virtual environment may be different): `./venv/bin/pip install .`
 
 If you want to run unittest tests before your install: `./venv/bin/python -m unittest -v`
 
@@ -96,4 +96,4 @@ readgroup and an additional key in the `metadata` object will have the most freq
 
 * This will only work as expected for fastqs that have sequence identifiers described above
 * We do *not* support interleaved fastq files, and no checks are done to ensure this
-* We do *not* support fastq files with a mixture of sequence identifiers
+* We do *not* support fastq files with a mixture of sequence identifier formats
