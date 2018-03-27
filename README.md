@@ -74,6 +74,9 @@ information added by the CLI.
 
 **Note: R1 and R2 are inferred from the sequence ID rows and automatically added to the output files**
 
+The input fastq can either be ASCII text or gzip (must end with `.gz`) compressed, no other compression formats are
+accepted. The outputs will always be `.gz` and gzip compressed.
+
 ## Report JSON
 
 A report JSON file will be created for each mate and readgroup detected by the software. For fastq files with sequence
