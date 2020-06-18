@@ -16,9 +16,8 @@ does need to have been compiled with the zlib binding, which are including in st
 
 1. Clone: `git clone git@github.com:kmhernan/gdc-fastq-splitter.git`
 2. Change directories: `cd gdc-fastq-splitter`
-3. Checkout develop branch: `git checkout develop`
-4. Create virtualenv (the path to your python3 executable may be different; your path to your virtual environment may be different): `virtualenv venv --python /usr/bin/python3.5`
-5. Install (the path to your virtual environment may be different): `./venv/bin/pip install .`
+3. Create virtualenv (the path to your python3 executable may be different; your path to your virtual environment may be different): `virtualenv venv --python /usr/bin/python3.5`
+4. Install (the path to your virtual environment may be different): `./venv/bin/pip install .`
 
 If you want to run unittest tests before your install: `./venv/bin/python -m unittest -v`
 
