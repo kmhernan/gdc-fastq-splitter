@@ -6,7 +6,10 @@ from collections import Counter
 
 class BaseReport:
     """Base report for a fastq file"""
-    def __init__(self, report_filename, fastq_filename, flowcell_barcode=None, lane_number=None):
+
+    def __init__(
+        self, report_filename, fastq_filename, flowcell_barcode=None, lane_number=None
+    ):
         self._report_filename = report_filename
         self.report_filename = os.path.basename(report_filename)
         self.fastq_filename = os.path.basename(fastq_filename)
@@ -23,30 +26,38 @@ class BaseReport:
 
     def to_dict(self):
         return {
-            'metadata': {
-                'fastq_filename': self.fastq_filename,
-                'flowcell_barcode': self.flowcell_barcode,
-                'lane_number': self.lane_number,
-                'record_count': self.record_counts
+            "metadata": {
+                "fastq_filename": self.fastq_filename,
+                "flowcell_barcode": self.flowcell_barcode,
+                "lane_number": self.lane_number,
+                "record_count": self.record_counts,
             }
         }
 
     def write_to_json(self):
-        with open(self._report_filename, 'wt') as o:
+        with open(self._report_filename, "wt") as o:
             json.dump(self.to_dict(), o, indent=2, sort_keys=True)
 
 
 class ReportWithBarcodes(BaseReport):
     """Report that contains barcode frequencies."""
-    def __init__(self, report_filename, fastq_filename, flowcell_barcode=None, lane_number=None):
-        super().__init__(report_filename, fastq_filename, flowcell_barcode=flowcell_barcode, lane_number=lane_number)
+
+    def __init__(
+        self, report_filename, fastq_filename, flowcell_barcode=None, lane_number=None
+    ):
+        super().__init__(
+            report_filename,
+            fastq_filename,
+            flowcell_barcode=flowcell_barcode,
+            lane_number=lane_number,
+        )
         self.barcode_frequency = Counter()
 
     @property
     def most_common_barcode(self):
         try:
             bc = self.barcode_frequency.most_common(1)[0][0]
-            return bc.replace('-', '+')
+            return bc.replace("-", "+")
         except IndexError:
             return None
 
@@ -60,12 +71,12 @@ class ReportWithBarcodes(BaseReport):
 
     def to_dict(self):
         return {
-            'metadata': {
-                'fastq_filename': self.fastq_filename,
-                'flowcell_barcode': self.flowcell_barcode,
-                'multiplex_barcode': self.most_common_barcode,
-                'lane_number': self.lane_number,
-                'record_count': self.record_counts
+            "metadata": {
+                "fastq_filename": self.fastq_filename,
+                "flowcell_barcode": self.flowcell_barcode,
+                "multiplex_barcode": self.most_common_barcode,
+                "lane_number": self.lane_number,
+                "record_count": self.record_counts,
             },
-            'barcode_frequency': dict(self.barcode_frequency)
+            "barcode_frequency": dict(self.barcode_frequency),
         }
