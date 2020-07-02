@@ -3,23 +3,44 @@
 CLI for splitting a fastq that has multiple readgroups. We currently only support non-interleaved
 fastq files with the following seqid formats:
 
-`@<machine>:<run>:<flowcell>:<lane>:<tile><x_coord>:<y_coord> <read_mate_number>:<vendor_filtered>:<bits>:<barcode>`
+`@<machine>:<run>:<flowcell>:<lane>:<tile>:<x_coord>:<y_coord> <read_mate_number>:<vendor_filtered>:<bits>:<barcode>`
 
 `@<machine>:<run>:<flowcell>:<lane>:<tile>:<x_coord>:<y_coord>/<read_mate_number>`
 
 **Note: Your fastq must contain one of these formats but not a mixture of both**
+
+## Docker
+
+There is a publicly accessible repo on Quay [https://quay.io/repository/kmhernan/gdc-fastq-splitter](https://quay.io/repository/kmhernan/gdc-fastq-splitter):
+
+```
+# Can pull particular tags if needed
+docker pull quay.io/kmhernan/gdc-fastq-splitter
+
+# Run image
+docker run --rm quay.io/kmhernan/gdc-fastq-splitter
+usage: gdc-fastq-splitter [-h] [--version] -o OUTPUT_PREFIX fastq_a [fastq_b]
+
+positional arguments:
+  fastq_a               Fastq file to process
+  fastq_b               If paired, the mate fastq file to process
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  -o OUTPUT_PREFIX, --output-prefix OUTPUT_PREFIX
+                        The output prefix to use for output files.
+```
 
 ## Install
 
 The only dependencies are python>=3.5 as only standard python libraries are used. However, your build of python3 
 does need to have been compiled with the zlib binding, which are including in standard python installations.
 
-1. Clone: `git clone git@github.com:kmhernan/gdc-fastq-splitter.git`
+1. Clone: `git clone https://github.com/kmhernan/gdc-fastq-splitter.git`
 2. Change directories: `cd gdc-fastq-splitter`
 3. Create virtualenv (the path to your python3 executable may be different; your path to your virtual environment may be different): `virtualenv venv --python /usr/bin/python3.5`
 4. Install (the path to your virtual environment may be different): `./venv/bin/pip install .`
-
-If you want to run unittest tests before your install: `./venv/bin/python -m unittest -v`
 
 ## Usage
 
